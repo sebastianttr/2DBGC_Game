@@ -13,4 +13,4 @@ We have added the following things to our game:
  - Added collision detection, a new Service Class called [RandomDispatcher.js](https://github.com/user/repo/blob/branch/other_file.md), which does something through a callback function every X milliseconds
  - Created a `gameObjects` array and `collectables` array for keeping track of all the game objects and collectables in an array. We then set the collision property of each collectable and remove the items upon collision by filtering and iterating over all collectables.
 
-[(https://github.com/sebastianttr/2DBGC_Game/blob/master/game_09_12_21.mp4)]
+https://github.com/sebastianttr/2DBGC_Game/blob/master/game_09_12_21.mp4
