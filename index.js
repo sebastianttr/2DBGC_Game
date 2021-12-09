@@ -62,17 +62,24 @@ const gameLoop = () => {
 };
 
 const update = (timePassedSinceLastRender) => {
-  //let isColliding = checkCollisionBetween(player, collectable);
-  // console.log(isColliding);
-
+  // update all game objects
   gameObjects.forEach((gameObject) => {
     gameObject.update(timePassedSinceLastRender);
   });
 
+  // set the collison prop for when the collision happens between player and
   collectables.forEach((collectable) => {
     let isColliding = checkCollisionBetween(player, collectable);
     collectable.isColliding = isColliding;
   });
+
+  // remove all of the collected items
+  collectables
+    .filter((col) => col.isColliding)
+    .forEach((col) => {
+      collectables.splice(collectables.indexOf(col), 1);
+      gameObjects.splice(gameObjects.indexOf(col), 1);
+    });
 };
 
 const render = () => {
