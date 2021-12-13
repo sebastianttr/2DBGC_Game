@@ -1,14 +1,17 @@
 import Player from "./Objects/Player.js";
 import Collectable from "./Objects/Collectable.js";
+import PointsDisplay from "./Objects/PointsDisplay.js";
 import RandomDispatcher, {
   randomNumberBetween,
 } from "./Services/RandomDispatcher.js";
+
 
 let context;
 let lastTickTimestamp;
 let player;
 let collectables = [];
 let gameObjects = [];
+let pointsDisplay;
 
 const CONFIG = {
   width: 800,
@@ -43,6 +46,9 @@ const init = () => {
   player = new Player(context, 100, 100, 100, 100, "./images/cat.png", CONFIG);
   gameObjects.push(player);
 
+  pointsDisplay = new PointsDisplay(context,  CONFIG.width/2, 25, 150, 110, CONFIG,false);
+  gameObjects.push(pointsDisplay);
+
   lastTickTimestamp = performance.now();
   gameLoop();
 };
@@ -67,19 +73,24 @@ const update = (timePassedSinceLastRender) => {
     gameObject.update(timePassedSinceLastRender);
   });
 
-  // set the collison prop for when the collision happens between player and
-  collectables.forEach((collectable) => {
-    let isColliding = checkCollisionBetween(player, collectable);
-    collectable.isColliding = isColliding;
+
+
+  // set the collison prop for when the collision happens between player and store in removeItems array
+  let removeItems = [];
+  collectables.forEach((collectable,index) => {
+    if(checkCollisionBetween(player, collectable)){
+      removeItems[index] = collectable;
+      pointsDisplay.increase();
+    }
   });
 
-  // remove all of the collected items
-  collectables
-    .filter((col) => col.isColliding)
-    .forEach((col) => {
-      collectables.splice(collectables.indexOf(col), 1);
-      gameObjects.splice(gameObjects.indexOf(col), 1);
+  // remove all of the collected items from colletables and gameObjects arrays
+  removeItems
+    .forEach((removeItem,index) => {
+      collectables.splice(collectables.indexOf(removeItem), 1);
+      gameObjects.splice(gameObjects.indexOf(removeItem), 1);
     });
+    
 };
 
 const render = () => {
@@ -92,10 +103,6 @@ const render = () => {
   });
 };
 
-window.onload = () => {
-  init();
-};
-
 let checkCollisionBetween = (gameObjectA, gameObjectB) => {
   let bbA = gameObjectA.getBoundingBox();
   let bbB = gameObjectB.getBoundingBox();
@@ -106,4 +113,9 @@ let checkCollisionBetween = (gameObjectA, gameObjectB) => {
     bbA.y < bbB.y + bbB.h &&
     bbA.y + bbA.h > bbB.y
   );
+};
+
+
+window.onload = () => {
+  init();
 };

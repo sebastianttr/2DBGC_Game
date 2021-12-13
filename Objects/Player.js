@@ -7,8 +7,10 @@ class Player extends GameObject {
     this.dx = 0;
     this.dy = 0;
     this.currentKeys = {};
+    this.velocityMultiplier = 1;
     this.velocity = 0.5;
     this.lastDirection = 1;
+    this.state = 'idle';
   }
 
   init() {
@@ -17,15 +19,50 @@ class Player extends GameObject {
      * ArrowUp, ArrowDown, ArrowLeft, ArrowRight
      */
     document.onkeydown = (event) => {
+      event.preventDefault();
+      event.stopPropagation();  
       this.currentKeys[event.code] = true;
     };
 
     document.onkeyup = (event) => {
+      event.preventDefault();
+      event.stopPropagation();  
       this.currentKeys[event.code] = false;
     };
 
     this.playerImg = new Image();
     this.playerImg.src = "./images/cat.png";
+
+    this.sprites = {
+      run:{
+        src: './assets/run-sprite.png',
+        frames: 8,
+        fps:20,
+        frameSize: {
+          width:400,
+          height:400
+        },
+        image:null
+      },
+      idle:{
+        src: './assets/idle-sprite.png',
+        frames: 10,
+        fps:20,
+        frameSize: {
+          width:400,
+          height:400
+        },
+        image:null
+      }
+    }
+
+    Object.values(this.sprites).forEach(
+      (sprite) => {
+        sprite.image = new Image();
+        sprite.image.src = sprite.src;
+      }
+    )
+
   }
 
   update(timePassedSinceLastRender) {
@@ -42,9 +79,15 @@ class Player extends GameObject {
     //store the last direction the player moved in
     if (this.dx != 0) this.lastDirection = this.dx;
 
+    //set the correct speed based on the space key being pressed 
+    this.velocityMultiplier = this.currentKeys["Space"]?1.5:1;
+
     //calculate new position
-    this.x += timePassedSinceLastRender * this.dx * this.velocity;
-    this.y += timePassedSinceLastRender * this.dy * this.velocity;
+    this.x += timePassedSinceLastRender * this.dx * (this.velocity*this.velocityMultiplier);
+    this.y += timePassedSinceLastRender * this.dy * (this.velocity*this.velocityMultiplier);
+
+    // set the current state for the sprites
+    this.state = this.dx === 0 && this.dy === 0 ? 'idle':'run';
 
     //set the boundries
     this.#processBoundaries();
@@ -68,17 +111,38 @@ class Player extends GameObject {
     //mirroring
     this.context.scale(this.lastDirection, 1);
 
+    // get the correct sprite
+    let coords = this.getImageSpriteCoordinate(this.sprites[this.state]);
+
     //draw filled retangle
     this.context.drawImage(
-      this.playerImg,
-      -this.width / 2,
-      -this.height / 2,
-      this.width,
-      this.height
+      this.sprites[this.state].image,// image
+      coords.sourceX,       // source x
+      coords.sourceY,       // soruce y
+      coords.sourceWidth,   // source width
+      coords.sourceHeight,  // source height
+      -this.width / 2,      // destination x
+      -this.height / 2,     // destination y
+      this.width,           // destination width
+      this.height,          // destination height
     );
 
     //reset the transform
     this.context.resetTransform();
+  }
+
+  getImageSpriteCoordinate(sprite) {
+
+    let frameX = Math.floor(performance.now() / 1000 * sprite.fps  % sprite.frames);
+    
+    let coords = {
+      sourceX: frameX*sprite.frameSize.width,     // TODO
+      sourceY: 0,
+      sourceWidth: sprite.frameSize.width,
+      sourceHeight: sprite.frameSize.height
+    }
+
+    return coords;
   }
 }
 
