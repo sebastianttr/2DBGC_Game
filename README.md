@@ -2,7 +2,7 @@
 
 This is the game we are working on in the 2D Browser Game Coding course
 
-## Progress as of December 14, 2021
+## Progress as of December 13, 2021
 These have been added to this iteration of the game: 
  - Changed the way we handled the removal of collision detected items (using an `removeItems[]` array instead if setting the `isColliding` property of the `Collectable` object to `true`)
  - Added a new `PointsDisplay` game object, which inherits the `GameObject` class and has `render()` and `update()` 
