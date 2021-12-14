@@ -36,14 +36,14 @@ const init = () => {
       newY,
       70,
       70,
-      "./images/mouse.png",
+      "./Assets/mouse.png",
       CONFIG
     );
     collectables.push(randomCollectable);
     gameObjects.push(randomCollectable);
   }, dispatcherOptions);
 
-  player = new Player(context, 100, 100, 100, 100, "./images/cat.png", CONFIG);
+  player = new Player(context, 100, 100, 100, 100, "./Assets/cat.png", CONFIG);
   gameObjects.push(player);
 
   pointsDisplay = new PointsDisplay(context,  CONFIG.width/2, 25, 150, 110, CONFIG,false);

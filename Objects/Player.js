@@ -19,14 +19,13 @@ class Player extends GameObject {
      * ArrowUp, ArrowDown, ArrowLeft, ArrowRight
      */
     document.onkeydown = (event) => {
-      event.preventDefault();
-      event.stopPropagation();  
-      this.currentKeys[event.code] = true;
+      if(event.code.startsWith("Arrow") || event.code === "Space"){
+        event.preventDefault();
+        this.currentKeys[event.code] = true;
+      }
     };
 
     document.onkeyup = (event) => {
-      event.preventDefault();
-      event.stopPropagation();  
       this.currentKeys[event.code] = false;
     };
 
@@ -116,15 +115,15 @@ class Player extends GameObject {
 
     //draw filled retangle
     this.context.drawImage(
-      this.sprites[this.state].image,// image
-      coords.sourceX,       // source x
-      coords.sourceY,       // soruce y
-      coords.sourceWidth,   // source width
-      coords.sourceHeight,  // source height
-      -this.width / 2,      // destination x
-      -this.height / 2,     // destination y
-      this.width,           // destination width
-      this.height,          // destination height
+      this.sprites[this.state].image, // image
+      coords.sourceX,                 // source x
+      coords.sourceY,                 // soruce y
+      coords.sourceWidth,             // source width
+      coords.sourceHeight,            // source height
+      -this.width / 2,                // destination x
+      -this.height / 2,               // destination y
+      this.width,                     // destination width
+      this.height,                    // destination height
     );
 
     //reset the transform
@@ -144,6 +143,7 @@ class Player extends GameObject {
 
     return coords;
   }
+
 }
 
 export default Player;
