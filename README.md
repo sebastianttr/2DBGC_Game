@@ -11,6 +11,8 @@ These have been added to this iteration of the game:
 
 -> Assignment 5 also included in this commit
 
+![](https://raw.githubusercontent.com/sebastianttr/2DBGC_Game/master/gameprogress_13_12_21.gif)
+
 
 ## Progress as of December 09, 2021
 
