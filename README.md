@@ -1,5 +1,14 @@
 # 2DBGC Game
 
+## Progress as of December 14, 2021
+These have been added to this iteration of the game: 
+ - Changed the way we handled the removal of collision detected items (using an `removeItems[]` array instead if setting the `isColliding` property of the `Collectable` object to `true`)
+ - Added a new `PointsDisplay` game object, which inherits the `GameObject` class and has `render()` and `update()` 
+ - `PointsDisplay` was programmed to be used in a Canvas (or with DOM) and was instantiated in the [`index.js`](https://github.com/sebastianttr/2DBGC_Game/blob/master/index.js) file 
+ - Created a sprite sheet and added the sprites to the `Player` object -> Player (cat) is now animated (idle + run sprites) 
+
+-> Assignment 5 also included in this commit
+
 This is the game we are working on in the 2D Browser Game Coding course
 
 ## Progress as of December 09, 2021
