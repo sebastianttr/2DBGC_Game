@@ -16,6 +16,7 @@ let pointsDisplay;
 const CONFIG = {
   width: 800,
   height: 600,
+  debug:false,
 };
 
 const init = () => {
@@ -41,6 +42,13 @@ const init = () => {
     );
     collectables.push(randomCollectable);
     gameObjects.push(randomCollectable);
+
+    randomCollectable.onRemove( () => {
+      //remove me
+     removeCollectable(randomCollectable);
+    })
+
+
   }, dispatcherOptions);
 
   player = new Player(context, 100, 100, 100, 100, "./Assets/cat.png", CONFIG);
@@ -73,8 +81,6 @@ const update = (timePassedSinceLastRender) => {
     gameObject.update(timePassedSinceLastRender);
   });
 
-
-
   // set the collison prop for when the collision happens between player and store in removeItems array
   let removeItems = [];
   collectables.forEach((collectable,index) => {
@@ -87,8 +93,7 @@ const update = (timePassedSinceLastRender) => {
   // remove all of the collected items from colletables and gameObjects arrays
   removeItems
     .forEach((removeItem,index) => {
-      collectables.splice(collectables.indexOf(removeItem), 1);
-      gameObjects.splice(gameObjects.indexOf(removeItem), 1);
+      removeCollectable(removeItem)
     });
     
 };
@@ -102,6 +107,11 @@ const render = () => {
     gameObject.render(timePassedSinceLastRender);
   });
 };
+
+let removeCollectable = (collectible) => {
+  collectables.splice(collectables.indexOf(collectible),1);
+  gameObjects.splice(gameObjects.indexOf(collectible),1);
+}
 
 let checkCollisionBetween = (gameObjectA, gameObjectB) => {
   let bbA = gameObjectA.getBoundingBox();
